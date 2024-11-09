@@ -4,34 +4,34 @@ import dictionary from "./dictionary.js";
 
 function App() {
   const wordSearch = dictionary;
-  const [deatils, setDetails] = useState([]);
+  const [details, setDetails] = useState([]);
   const [search, setSearch] = useState("");
+
   const handleSubmit = (e) => {
     e.preventDefault();
     try {
       const value = wordSearch.filter(
         (item) => item.word.toLowerCase() === search.toLowerCase()
       );
-      console.log(value);
-      if (!value) {
+
+      if (value.length === 0) {
         setDetails([{ meaning: "Word not found in the dictionary." }]);
+      } else {
+        setDetails(value);
       }
-      setDetails(value);
     } catch (e) {
       setDetails([{ meaning: "Word not found in the dictionary." }]);
     }
   };
-useEffect(()=>{
-console.log(deatils)
-},[deatils])
+
+  useEffect(() => {
+    console.log(details);
+  }, [details]);
+
   return (
     <div className="App">
       <h1>Dictionary App</h1>
-      <form
-        onSubmit={(e) => {
-          handleSubmit(e);
-        }}
-      >
+      <form onSubmit={handleSubmit}>
         <input
           type="text"
           placeholder="Search for a word"
@@ -40,9 +40,12 @@ console.log(deatils)
         />
         <button type="submit">Search</button>
       </form>
-      <h3 style={{textAlign:'center'}}>Definiton : </h3>
-      {deatils.length>0?deatils.map((item)=> <p style={{fontWeight: '200'}}>{item.meaning}</p>
-      ):<p>Word not found in the dictionary.</p> }
+      <h3 style={{ textAlign: "center" }}>Definition:</h3>
+      <p>
+        {details.length > 0
+          ? details.map((item) => item.meaning).join(" ")
+          : "Word not found in the dictionary."}
+      </p>
     </div>
   );
 }
